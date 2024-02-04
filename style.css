@@ -130,6 +130,7 @@ input[type="text"],input[type="number"]{
 .list li:hover .delete{
     opacity:1 ;
 }
+
 /* @media screen and (max-width:600px)
 {
 
