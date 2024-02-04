@@ -6,26 +6,47 @@ const form=document.getElementById("form");
 const text=document.getElementById('text');
 const amount=document.getElementById("amount");
 
-const dummy=[
-    {id:1,text:"Income",amount:4000},
-    {id:2,text:"book",amount:-20},
-    {id:3,text:"grocery",amount:-300},
-    {id:4,text:"petrol",amount:1000},
-];
 
-let transactions=dummy;
+let transactions=[];
 
-function addTranscation(transactions)
-{
-    const sign=transactions.amount<0?"-":"+";
-    const item=document.createElement("li");
+
+//Add transaction
+function addTranscations(e) {
+    e.preventDefault();
+    if (text.value.trim() === "" || amount.value.trim() === "") {
+        alert("Please enter Text and Value");
+    } else {
+        const newTransaction = {
+            id: generateId(),
+            text: text.value,
+            amount: +amount.value,
+        };
+
+        transactions.push(newTransaction);
+        addTranscation(newTransaction);
+        updateValues();
+        text.value = "";
+        amount.value = "";
+    }
+}
+
+//generate id
+function generateId(){
+    return Math.floor(Math.random()*100000000);
+}
+
+
+
+function addTranscation(transaction) {
+    const sign = transaction.amount < 0 ? "-" : "+";
+    const item = document.createElement("li");
 
     item.classList.add(
-        transactions.amount<0?"his":"plus"
-    )
-    item.innerHTML=`
-    ${transactions.text}<span>${sign}${Math.abs(transactions.amount)}</span>
-    <button class="delete" onclick="">X</button>
+        transaction.amount < 0 ? "his" : "plus"
+    );
+    item.innerHTML = `
+        ${transaction.text}<span>${sign}${Math.abs(transaction.amount)}</span>
+        <button class="delete" onclick="">X</button>
     `;
 
     list.appendChild(item);
@@ -50,4 +71,7 @@ function Init(){
     transactions.forEach(addTranscation);
     updateValues();
 }
-    addTranscation(transactions);
+// addTranscation(transactions);
+Init();
+
+form.addEventListener("submit",addTranscations);
